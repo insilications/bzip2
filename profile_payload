@@ -1,0 +1,4 @@
+cp /usr/bin/x86_64-generic-linux-gcc .
+./bzip2 --verbose x86_64-generic-linux-gcc
+./bzip2 -d --verbose x86_64-generic-linux-gcc.bz2
+ctest -V

@@ -1,0 +1,7 @@
+# This file contains recursive sources that require this package
+compat-python36
+filesystem
+gvfs
+python
+python3
+python37
