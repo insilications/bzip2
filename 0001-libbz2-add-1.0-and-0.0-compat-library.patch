@@ -1,0 +1,47 @@
+From 1d50247c2208f7597c51412efb75e5453a3a0e7d Mon Sep 17 00:00:00 2001
+From: insilications <boboniboni@gmail.com>
+Date: Sat, 18 Jul 2020 15:23:52 -0300
+Subject: [PATCH] libbz2: add 1.0 and 0.0 compat library
+
+---
+ CMakeLists.txt | 17 ++++++++++++++---
+ 1 file changed, 14 insertions(+), 3 deletions(-)
+
+diff --git a/CMakeLists.txt b/CMakeLists.txt
+index 1807aa4..7b54369 100644
+--- a/CMakeLists.txt
++++ b/CMakeLists.txt
+@@ -22,9 +22,10 @@ configure_file (
+   "${PROJECT_BINARY_DIR}/bz_version.h"
+ )
+ include_directories("${PROJECT_BINARY_DIR}")
+-
+-math(EXPR LT_SOVERSION "${LT_CURRENT} - ${LT_AGE}")
+-set(LT_VERSION "${LT_SOVERSION}.${LT_AGE}.${LT_REVISION}")
++set(LT_SOVERSION "${LT_CURRENT}.${LT_AGE}")
++set(LT_VERSION "${LT_CURRENT}.${LT_AGE}.${LT_REVISION}")
++set(LT_SOVERSION-COMPAT "0")
++set(LT_VERSION-COMPAT "0.0.0")
+ set(PACKAGE_VERSION "${PROJECT_VERSION}")
+ HexVersion(PACKAGE_VERSION_NUM ${PROJECT_VERSION_MAJOR} ${PROJECT_VERSION_MINOR} ${PROJECT_VERSION_PATCH})
+ 
+@@ -250,6 +251,16 @@ if(ENABLE_SHARED_LIB)
+         VERSION ${LT_VERSION} SOVERSION ${LT_SOVERSION})
+     install(TARGETS bz2 DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+     install(FILES bzlib.h DESTINATION "${CMAKE_INSTALL_INCLUDEDIR}")
++    add_library(bz2-compat SHARED ${BZ2_RES})
++    target_sources(bz2-compat
++        PRIVATE   ${BZ2_SOURCES}
++                  "${CMAKE_CURRENT_SOURCE_DIR}/libbz2.def"
++        PUBLIC    "${CMAKE_CURRENT_SOURCE_DIR}/bzlib_private.h"
++        INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/bzlib.h")
++    set_target_properties(bz2-compat PROPERTIES
++        COMPILE_FLAGS "${WARNCFLAGS}"
++        VERSION ${LT_VERSION-COMPAT} SOVERSION ${LT_SOVERSION-COMPAT})
++    install(TARGETS bz2-compat DESTINATION "${CMAKE_INSTALL_LIBDIR}")
+ endif()
+ 
+ if(ENABLE_STATIC_LIB)
+-- 
+2.27.0
+

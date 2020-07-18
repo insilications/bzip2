@@ -1,2 +1,9 @@
-# teste install_append_special
- ln -sf libbz2.so.1.0.7 %{buildroot}/usr/lib64/libbz2.so.1.0
+rm -f %{buildroot}/usr/lib64/libbz2-compat.so
+rm -f %{buildroot}/usr/lib64/libbz2-compat.so.0
+#rm -f %{buildroot}/usr/lib64/libbz2.so.1
+mv %{buildroot}/usr/lib64/libbz2-compat.so.0.0.0 %{buildroot}/usr/lib64/libbz2.so.0.0.0
+ln -sf libbz2.so.0.0.0 %{buildroot}/usr/lib64/libbz2.so.0
+#ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib64/libbz2.so.1
+#ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib64/libbz2.so.1.0
+#ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib64/libbz2.so.%{version}
+rm -f %{buildroot}/usr/lib64/libbz2-compat.so*

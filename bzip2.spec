@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : bzip2
 Version  : 19.09.10
-Release  : 19
+Release  : 21
 URL      : /insilications/build/clearlinux/packages/bzip2/bzip2-19.09.10.zip
 Source0  : /insilications/build/clearlinux/packages/bzip2/bzip2-19.09.10.zip
 Summary  : Lossless, block-sorting data compression
@@ -21,6 +21,7 @@ BuildRequires : python3-dev
 # Suppress stripping binaries
 %define __strip /bin/true
 %define debug_package %{nil}
+Patch1: 0001-libbz2-add-1.0-and-0.0-compat-library.patch
 
 %description
 Bzip2
@@ -68,13 +69,14 @@ staticdev components for the bzip2 package.
 %prep
 %setup -q -n bzip2-19.09.10
 cd %{_builddir}/bzip2-19.09.10
+%patch1 -p1
 
 %build
 unset http_proxy
 unset https_proxy
 unset no_proxy
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1595091070
+export SOURCE_DATE_EPOCH=1595097432
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -176,7 +178,7 @@ unset no_proxy
 ctest -V
 
 %install
-export SOURCE_DATE_EPOCH=1595091070
+export SOURCE_DATE_EPOCH=1595097432
 rm -rf %{buildroot}
 pushd clr-build-special
 %make_install_special  || :
@@ -185,8 +187,15 @@ pushd clr-build
 %make_install
 popd
 ## install_append_special content
-# teste install_append_special
-ln -sf libbz2.so.1.0.7 %{buildroot}/usr/lib64/libbz2.so.1.0
+rm -f %{buildroot}/usr/lib64/libbz2-compat.so
+rm -f %{buildroot}/usr/lib64/libbz2-compat.so.0
+#rm -f %{buildroot}/usr/lib64/libbz2.so.1
+mv %{buildroot}/usr/lib64/libbz2-compat.so.0.0.0 %{buildroot}/usr/lib64/libbz2.so.0.0.0
+ln -sf libbz2.so.0.0.0 %{buildroot}/usr/lib64/libbz2.so.0
+#ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib64/libbz2.so.1
+#ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib64/libbz2.so.1.0
+#ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib64/libbz2.so.%{version}
+rm -f %{buildroot}/usr/lib64/libbz2-compat.so*
 ## install_append_special end
 
 %files
@@ -209,7 +218,8 @@ ln -sf libbz2.so.1.0.7 %{buildroot}/usr/lib64/libbz2.so.1.0
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/libbz2.so.1
+/usr/lib64/libbz2.so.0
+/usr/lib64/libbz2.so.0.0.0
 /usr/lib64/libbz2.so.1.0
 /usr/lib64/libbz2.so.1.0.7
 
