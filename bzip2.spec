@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : bzip2
 Version  : 19.09.10
-Release  : 18
+Release  : 19
 URL      : /insilications/build/clearlinux/packages/bzip2/bzip2-19.09.10.zip
 Source0  : /insilications/build/clearlinux/packages/bzip2/bzip2-19.09.10.zip
 Summary  : Lossless, block-sorting data compression
@@ -74,7 +74,7 @@ unset http_proxy
 unset https_proxy
 unset no_proxy
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1595090111
+export SOURCE_DATE_EPOCH=1595091070
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -176,7 +176,7 @@ unset no_proxy
 ctest -V
 
 %install
-export SOURCE_DATE_EPOCH=1595090111
+export SOURCE_DATE_EPOCH=1595091070
 rm -rf %{buildroot}
 pushd clr-build-special
 %make_install_special  || :
@@ -204,11 +204,11 @@ ln -sf libbz2.so.1.0.7 %{buildroot}/usr/lib64/libbz2.so.1.0
 %files dev
 %defattr(-,root,root,-)
 /usr/include/bzlib.h
+/usr/lib64/libbz2.so
 /usr/lib64/pkgconfig/bzip2.pc
 
 %files lib
 %defattr(-,root,root,-)
-/usr/lib64/libbz2.so
 /usr/lib64/libbz2.so.1
 /usr/lib64/libbz2.so.1.0
 /usr/lib64/libbz2.so.1.0.7
