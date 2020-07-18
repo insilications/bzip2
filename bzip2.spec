@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : bzip2
 Version  : 19.09.10
-Release  : 14
+Release  : 15
 URL      : /insilications/build/clearlinux/packages/bzip2/bzip2-19.09.10.zip
 Source0  : /insilications/build/clearlinux/packages/bzip2/bzip2-19.09.10.zip
 Summary  : Lossless, block-sorting data compression
@@ -74,7 +74,7 @@ unset http_proxy
 unset https_proxy
 unset no_proxy
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1594689488
+export SOURCE_DATE_EPOCH=1595037879
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -105,7 +105,7 @@ export CXXFLAGS="${CXXFLAGS_GENERATE}"
 export FFLAGS="${FFLAGS_GENERATE}"
 export FCFLAGS="${FCFLAGS_GENERATE}"
 export LDFLAGS="${LDFLAGS_GENERATE}"
-%cmake .. -DENABLE_APP=1 -DENABLE_STATIC_LIB=1 -DENABLE_SHARED_LIB=0 -DCMAKE_POSITION_INDEPENDENT_CODE=0 -DCMAKE_BUILD_TYPE=None
+%cmake .. -DENABLE_APP=1 -DENABLE_STATIC_LIB=1 -DENABLE_SHARED_LIB=0 -DCMAKE_POSITION_INDEPENDENT_CODE=1 -DCMAKE_BUILD_TYPE=None
 make  %{?_smp_mflags}  V=1 VERBOSE=1
 
 cp /usr/bin/x86_64-generic-linux-gcc .
@@ -118,7 +118,7 @@ export CXXFLAGS="${CXXFLAGS_USE}"
 export FFLAGS="${FFLAGS_USE}"
 export FCFLAGS="${FCFLAGS_USE}"
 export LDFLAGS="${LDFLAGS_USE}"
-%cmake .. -DENABLE_APP=1 -DENABLE_STATIC_LIB=1 -DENABLE_SHARED_LIB=0 -DCMAKE_POSITION_INDEPENDENT_CODE=0 -DCMAKE_BUILD_TYPE=None
+%cmake .. -DENABLE_APP=1 -DENABLE_STATIC_LIB=1 -DENABLE_SHARED_LIB=0 -DCMAKE_POSITION_INDEPENDENT_CODE=1 -DCMAKE_BUILD_TYPE=None
 make  %{?_smp_mflags}  V=1 VERBOSE=1
 popd
 mkdir -p clr-build-special
@@ -151,7 +151,7 @@ export CXXFLAGS="${CXXFLAGS_GENERATE}"
 export FFLAGS="${FFLAGS_GENERATE}"
 export FCFLAGS="${FCFLAGS_GENERATE}"
 export LDFLAGS="${LDFLAGS_GENERATE}"
-%cmake .. -DENABLE_APP=1 -DENABLE_STATIC_LIB=0 -DENABLE_SHARED_LIB=1 -DCMAKE_POSITION_INDEPENDENT_CODE=0 -DCMAKE_BUILD_TYPE=None
+%cmake .. -DENABLE_APP=1 -DENABLE_STATIC_LIB=0 -DENABLE_SHARED_LIB=1 -DCMAKE_POSITION_INDEPENDENT_CODE=1 -DCMAKE_BUILD_TYPE=None
 make  %{?_smp_mflags}  V=1 VERBOSE=1
 
 cp /usr/bin/x86_64-generic-linux-gcc .
@@ -164,7 +164,7 @@ export CXXFLAGS="${CXXFLAGS_USE}"
 export FFLAGS="${FFLAGS_USE}"
 export FCFLAGS="${FCFLAGS_USE}"
 export LDFLAGS="${LDFLAGS_USE}"
-%cmake .. -DENABLE_APP=1 -DENABLE_STATIC_LIB=0 -DENABLE_SHARED_LIB=1 -DCMAKE_POSITION_INDEPENDENT_CODE=0 -DCMAKE_BUILD_TYPE=None
+%cmake .. -DENABLE_APP=1 -DENABLE_STATIC_LIB=0 -DENABLE_SHARED_LIB=1 -DCMAKE_POSITION_INDEPENDENT_CODE=1 -DCMAKE_BUILD_TYPE=None
 make  %{?_smp_mflags}  V=1 VERBOSE=1
 popd
 
@@ -176,7 +176,7 @@ unset no_proxy
 ctest -V
 
 %install
-export SOURCE_DATE_EPOCH=1594689488
+export SOURCE_DATE_EPOCH=1595037879
 rm -rf %{buildroot}
 pushd clr-build-special
 %make_install_special  || :
