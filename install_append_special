@@ -1,1 +1,2 @@
 # teste install_append_special
+ ln -sf libbz2.so.1.0.7 %{buildroot}/usr/lib64/libbz2.so.1.0
