@@ -5,9 +5,9 @@
 %define keepstatic 1
 Name     : bzip2
 Version  : 19.09.10
-Release  : 21
-URL      : /insilications/build/clearlinux/packages/bzip2/bzip2-19.09.10.zip
-Source0  : /insilications/build/clearlinux/packages/bzip2/bzip2-19.09.10.zip
+Release  : 22
+URL      : file:///insilications/build/clearlinux/packages/bzip2/bzip2-19.09.10.zip
+Source0  : file:///insilications/build/clearlinux/packages/bzip2/bzip2-19.09.10.zip
 Summary  : Lossless, block-sorting data compression
 Group    : Development/Tools
 License  : GPL-3.0+ LGPL-2.0+
@@ -15,6 +15,7 @@ Requires: bzip2-bin = %{version}-%{release}
 Requires: bzip2-lib = %{version}-%{release}
 BuildRequires : buildreq-cmake
 BuildRequires : buildreq-meson
+BuildRequires : findutils
 BuildRequires : pkg-config
 BuildRequires : pkgconfig(cunit)
 BuildRequires : python3-dev
@@ -76,7 +77,7 @@ unset http_proxy
 unset https_proxy
 unset no_proxy
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1595097432
+export SOURCE_DATE_EPOCH=1595857515
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -178,7 +179,7 @@ unset no_proxy
 ctest -V
 
 %install
-export SOURCE_DATE_EPOCH=1595097432
+export SOURCE_DATE_EPOCH=1595857515
 rm -rf %{buildroot}
 pushd clr-build-special
 %make_install_special  || :
