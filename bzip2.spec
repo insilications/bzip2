@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : bzip2
 Version  : 19.09.10
-Release  : 22
+Release  : 23
 URL      : file:///insilications/build/clearlinux/packages/bzip2/bzip2-19.09.10.zip
 Source0  : file:///insilications/build/clearlinux/packages/bzip2/bzip2-19.09.10.zip
 Summary  : Lossless, block-sorting data compression
@@ -16,7 +16,13 @@ Requires: bzip2-lib = %{version}-%{release}
 BuildRequires : buildreq-cmake
 BuildRequires : buildreq-meson
 BuildRequires : findutils
+BuildRequires : gcc-dev32
+BuildRequires : gcc-libgcc32
+BuildRequires : gcc-libstdc++32
+BuildRequires : glibc-dev32
+BuildRequires : glibc-libc32
 BuildRequires : pkg-config
+BuildRequires : pkgconfig(32cunit)
 BuildRequires : pkgconfig(cunit)
 BuildRequires : python3-dev
 # Suppress stripping binaries
@@ -50,12 +56,31 @@ Requires: bzip2 = %{version}-%{release}
 dev components for the bzip2 package.
 
 
+%package dev32
+Summary: dev32 components for the bzip2 package.
+Group: Default
+Requires: bzip2-lib32 = %{version}-%{release}
+Requires: bzip2-bin = %{version}-%{release}
+Requires: bzip2-dev = %{version}-%{release}
+
+%description dev32
+dev32 components for the bzip2 package.
+
+
 %package lib
 Summary: lib components for the bzip2 package.
 Group: Libraries
 
 %description lib
 lib components for the bzip2 package.
+
+
+%package lib32
+Summary: lib32 components for the bzip2 package.
+Group: Default
+
+%description lib32
+lib32 components for the bzip2 package.
 
 
 %package staticdev
@@ -77,7 +102,7 @@ unset http_proxy
 unset https_proxy
 unset no_proxy
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1595857515
+export SOURCE_DATE_EPOCH=1596165465
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -170,6 +195,40 @@ export LDFLAGS="${LDFLAGS_USE}"
 %cmake .. -DENABLE_APP=1 -DENABLE_STATIC_LIB=0 -DENABLE_SHARED_LIB=1 -DCMAKE_POSITION_INDEPENDENT_CODE=1 -DCMAKE_BUILD_TYPE=None
 make  %{?_smp_mflags}  V=1 VERBOSE=1
 popd
+mkdir -p clr-build32
+pushd clr-build32
+export GCC_IGNORE_WERROR=1
+## altflags_pgo content
+## pgo generate
+export PGO_GEN="-fprofile-generate=/var/tmp/pgo -fprofile-dir=/var/tmp/pgo -fprofile-abs-path -fprofile-update=atomic -fprofile-arcs -ftest-coverage --coverage -fprofile-partial-training"
+export CFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe $PGO_GEN"
+export FCFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe $PGO_GEN"
+export FFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe $PGO_GEN"
+export CXXFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -fvisibility-inlines-hidden -pipe $PGO_GEN"
+export LDFLAGS_GENERATE="-O3 -march=native -mtune=native -falign-functions=32 -fno-semantic-interposition -fno-stack-protector -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -mtls-dialect=gnu2 -fno-math-errno -fno-trapping-math -pipe $PGO_GEN"
+## pgo use
+## -ffat-lto-objects -fno-PIE -fno-PIE -m64 -no-pie -fpic -fvisibility=hidden
+## gcc: -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-common -Wno-error -Wp,-D_REENTRANT
+export PGO_USE="-fprofile-use=/var/tmp/pgo -fprofile-dir=/var/tmp/pgo -fprofile-abs-path -fprofile-correction -fprofile-partial-training"
+export CFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -fno-common -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe $PGO_USE"
+export FCFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -fno-common -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe $PGO_USE"
+export FFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -fno-common -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe $PGO_USE"
+export CXXFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -fno-common -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -fvisibility-inlines-hidden -pipe $PGO_USE"
+export LDFLAGS_USE="-g -O3 -march=native -mtune=native -fgraphite-identity -Wall -Wl,--as-needed -Wl,--build-id=sha1 -Wl,--enable-new-dtags -Wl,--hash-style=gnu -Wl,-O2 -Wl,-z,now -Wl,-z,relro -falign-functions=32 -fasynchronous-unwind-tables -fdevirtualize-at-ltrans -floop-nest-optimize -fno-math-errno -fno-semantic-interposition -fno-stack-protector -fno-trapping-math -ftree-loop-distribute-patterns -ftree-loop-vectorize -ftree-vectorize -funroll-loops -fuse-ld=bfd -fuse-linker-plugin -malign-data=cacheline -fno-common -feliminate-unused-debug-types -fipa-pta -flto=16 -fno-plt -mtls-dialect=gnu2 -Wl,-sort-common -Wno-error -Wp,-D_REENTRANT -pipe $PGO_USE"
+export AR=gcc-ar
+export RANLIB=gcc-ranlib
+export NM=gcc-nm
+#export CCACHE_DISABLE=1
+## altflags_pgo end
+export PKG_CONFIG_PATH="/usr/lib32/pkgconfig"
+export ASFLAGS="${ASFLAGS}${ASFLAGS:+ }--32"
+export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32 -mstackrealign"
+export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32 -mstackrealign"
+export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
+%cmake -DLIB_INSTALL_DIR:PATH=/usr/lib32 -DCMAKE_INSTALL_LIBDIR=/usr/lib32 -DLIB_SUFFIX=32 .. -DENABLE_APP=1 -DENABLE_STATIC_LIB=1 -DENABLE_SHARED_LIB=0 -DCMAKE_POSITION_INDEPENDENT_CODE=1 -DCMAKE_BUILD_TYPE=None  -DENABLE_APP=1 -DENABLE_STATIC_LIB=0 -DENABLE_SHARED_LIB=1 -DCMAKE_POSITION_INDEPENDENT_CODE=1 -DCMAKE_BUILD_TYPE=None
+make  %{?_smp_mflags}  V=1 VERBOSE=1
+unset PKG_CONFIG_PATH
+popd
 
 %check
 export LANG=C.UTF-8
@@ -179,14 +238,34 @@ unset no_proxy
 ctest -V
 
 %install
-export SOURCE_DATE_EPOCH=1595857515
+export SOURCE_DATE_EPOCH=1596165465
 rm -rf %{buildroot}
+pushd clr-build32
+%make_install32
+if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
+then
+pushd %{buildroot}/usr/lib32/pkgconfig
+for i in *.pc ; do ln -s $i 32$i ; done
+popd
+fi
+popd
 pushd clr-build-special
 %make_install_special  || :
 popd
 pushd clr-build
 %make_install
 popd
+## install_append content
+rm -f %{buildroot}/usr/lib32/libbz2-compat.so
+rm -f %{buildroot}/usr/lib32/libbz2-compat.so.0
+#rm -f %{buildroot}/usr/lib32/libbz2.so.1
+mv %{buildroot}/usr/lib32/libbz2-compat.so.0.0.0 %{buildroot}/usr/lib32/libbz2.so.0.0.0
+ln -sf libbz2.so.0.0.0 %{buildroot}/usr/lib32/libbz2.so.0
+#ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib32/libbz2.so.1
+#ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib32/libbz2.so.1.0
+#ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib32/libbz2.so.%{version}
+rm -f %{buildroot}/usr/lib32/libbz2-compat.so*
+## install_append end
 ## install_append_special content
 rm -f %{buildroot}/usr/lib64/libbz2-compat.so
 rm -f %{buildroot}/usr/lib64/libbz2-compat.so.0
@@ -217,12 +296,25 @@ rm -f %{buildroot}/usr/lib64/libbz2-compat.so*
 /usr/lib64/libbz2.so
 /usr/lib64/pkgconfig/bzip2.pc
 
+%files dev32
+%defattr(-,root,root,-)
+/usr/lib32/libbz2.so
+/usr/lib32/pkgconfig/32bzip2.pc
+/usr/lib32/pkgconfig/bzip2.pc
+
 %files lib
 %defattr(-,root,root,-)
 /usr/lib64/libbz2.so.0
 /usr/lib64/libbz2.so.0.0.0
 /usr/lib64/libbz2.so.1.0
 /usr/lib64/libbz2.so.1.0.7
+
+%files lib32
+%defattr(-,root,root,-)
+/usr/lib32/libbz2.so.0
+/usr/lib32/libbz2.so.0.0.0
+/usr/lib32/libbz2.so.1.0
+/usr/lib32/libbz2.so.1.0.7
 
 %files staticdev
 %defattr(-,root,root,-)
