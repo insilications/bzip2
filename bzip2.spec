@@ -5,7 +5,7 @@
 %define keepstatic 1
 Name     : bzip2
 Version  : 20.08.29
-Release  : 25
+Release  : 26
 URL      : file:///insilications/build/clearlinux/packages/bzip2/bzip2-20.08.29.tar.gz
 Source0  : file:///insilications/build/clearlinux/packages/bzip2/bzip2-20.08.29.tar.gz
 Summary  : Lossless, block-sorting data compression
@@ -100,7 +100,7 @@ unset http_proxy
 unset https_proxy
 unset no_proxy
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1598714793
+export SOURCE_DATE_EPOCH=1598718262
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -220,7 +220,7 @@ unset no_proxy
 ctest -V
 
 %install
-export SOURCE_DATE_EPOCH=1598714793
+export SOURCE_DATE_EPOCH=1598718262
 rm -rf %{buildroot}
 pushd clr-build32
 %make_install32
@@ -309,4 +309,4 @@ rm -f %{buildroot}/usr/lib64/libbz2-compat.so*
 
 %files staticdev
 %defattr(-,root,root,-)
-/usr/lib64/libbz2_static.a
+/usr/lib64/libbz2.a
