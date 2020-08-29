@@ -1,5 +1,5 @@
 PKG_NAME := bzip2
-URL = https://gitlab.com/federicomenaquintero/bzip2.git
+URL = https://github.com/insilications/bzip2-clr.git
 ARCHIVES = 
 
 include ../common/Makefile.common
