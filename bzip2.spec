@@ -5,9 +5,9 @@
 %define keepstatic 1
 Name     : bzip2
 Version  : 20.08.29
-Release  : 26
-URL      : file:///insilications/build/clearlinux/packages/bzip2/bzip2-20.08.29.tar.gz
-Source0  : file:///insilications/build/clearlinux/packages/bzip2/bzip2-20.08.29.tar.gz
+Release  : 27
+URL      : file:///insilications/build/clearlinux/packages/bzip2/bzip2-.tar.gz
+Source0  : file:///insilications/build/clearlinux/packages/bzip2/bzip2-.tar.gz
 Summary  : Lossless, block-sorting data compression
 Group    : Development/Tools
 License  : GPL-3.0+ LGPL-2.0+
@@ -50,6 +50,8 @@ Requires: bzip2-lib = %{version}-%{release}
 Requires: bzip2-bin = %{version}-%{release}
 Provides: bzip2-devel = %{version}-%{release}
 Requires: bzip2 = %{version}-%{release}
+Requires: bzip2-dev = %{version}-%{release}
+Requires: bzip2-dev32 = %{version}-%{release}
 
 %description dev
 dev components for the bzip2 package.
@@ -61,6 +63,7 @@ Group: Default
 Requires: bzip2-lib32 = %{version}-%{release}
 Requires: bzip2-bin = %{version}-%{release}
 Requires: bzip2-dev = %{version}-%{release}
+Requires: bzip2-dev32 = %{version}-%{release}
 
 %description dev32
 dev32 components for the bzip2 package.
@@ -86,6 +89,7 @@ lib32 components for the bzip2 package.
 Summary: staticdev components for the bzip2 package.
 Group: Default
 Requires: bzip2-dev = %{version}-%{release}
+Requires: bzip2-dev32 = %{version}-%{release}
 
 %description staticdev
 staticdev components for the bzip2 package.
@@ -99,8 +103,9 @@ cd %{_builddir}/bzip2
 unset http_proxy
 unset https_proxy
 unset no_proxy
+export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1598718262
+export SOURCE_DATE_EPOCH=1610596737
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -132,20 +137,20 @@ export FFLAGS="${FFLAGS_GENERATE}"
 export FCFLAGS="${FCFLAGS_GENERATE}"
 export LDFLAGS="${LDFLAGS_GENERATE}"
 %cmake ..   -DENABLE_APP=1 -DENABLE_STATIC_LIB=1 -DENABLE_SHARED_LIB=0 -DCMAKE_BUILD_TYPE=None -DCMAKE_C_FLAGS_RELWITHDEBINFO="-O3 -g" -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-O3 -g" -DCMAKE_C_FLAGS_RELEASE="-O3 -g" -DCMAKE_CXX_FLAGS_RELEASE="-O3 -g"
-make  %{?_smp_mflags}  V=1 VERBOSE=1 V=1 VERBOSE=1
+make  %{?_smp_mflags}  V=1 VERBOSE=1
 
 cp /usr/bin/x86_64-generic-linux-gcc .
 ./bzip2 --verbose x86_64-generic-linux-gcc
 ./bzip2 -d --verbose x86_64-generic-linux-gcc.bz2
 ctest -V
-find . -type f -not -name '*.gcno' -delete -print
+find . -type f,l -not -name '*.gcno' -delete -print
 export CFLAGS="${CFLAGS_USE}"
 export CXXFLAGS="${CXXFLAGS_USE}"
 export FFLAGS="${FFLAGS_USE}"
 export FCFLAGS="${FCFLAGS_USE}"
 export LDFLAGS="${LDFLAGS_USE}"
 %cmake ..   -DENABLE_APP=1 -DENABLE_STATIC_LIB=1 -DENABLE_SHARED_LIB=0 -DCMAKE_BUILD_TYPE=None -DCMAKE_C_FLAGS_RELWITHDEBINFO="-O3 -g" -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-O3 -g" -DCMAKE_C_FLAGS_RELEASE="-O3 -g" -DCMAKE_CXX_FLAGS_RELEASE="-O3 -g"
-make  %{?_smp_mflags}  V=1 VERBOSE=1 V=1 VERBOSE=1
+make  %{?_smp_mflags}  V=1 VERBOSE=1
 popd
 mkdir -p clr-build-special
 pushd clr-build-special
@@ -178,26 +183,26 @@ export FFLAGS="${FFLAGS_GENERATE}"
 export FCFLAGS="${FCFLAGS_GENERATE}"
 export LDFLAGS="${LDFLAGS_GENERATE}"
 %cmake .. -DENABLE_APP=1 -DENABLE_STATIC_LIB=0 -DENABLE_SHARED_LIB=1 -DCMAKE_BUILD_TYPE=None -DCMAKE_C_FLAGS_RELWITHDEBINFO="-O3 -g" -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-O3 -g" -DCMAKE_C_FLAGS_RELEASE="-O3 -g" -DCMAKE_CXX_FLAGS_RELEASE="-O3 -g"
-make  %{?_smp_mflags}  V=1 VERBOSE=1 V=1 VERBOSE=1
+make  %{?_smp_mflags}  V=1 VERBOSE=1
 
 cp /usr/bin/x86_64-generic-linux-gcc .
 ./bzip2 --verbose x86_64-generic-linux-gcc
 ./bzip2 -d --verbose x86_64-generic-linux-gcc.bz2
 ctest -V
-find . -type f -not -name '*.gcno' -delete -print
+find . -type f,l -not -name '*.gcno' -delete -print
 export CFLAGS="${CFLAGS_USE}"
 export CXXFLAGS="${CXXFLAGS_USE}"
 export FFLAGS="${FFLAGS_USE}"
 export FCFLAGS="${FCFLAGS_USE}"
 export LDFLAGS="${LDFLAGS_USE}"
 %cmake .. -DENABLE_APP=1 -DENABLE_STATIC_LIB=0 -DENABLE_SHARED_LIB=1 -DCMAKE_BUILD_TYPE=None -DCMAKE_C_FLAGS_RELWITHDEBINFO="-O3 -g" -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-O3 -g" -DCMAKE_C_FLAGS_RELEASE="-O3 -g" -DCMAKE_CXX_FLAGS_RELEASE="-O3 -g"
-make  %{?_smp_mflags}  V=1 VERBOSE=1 V=1 VERBOSE=1
+make  %{?_smp_mflags}  V=1 VERBOSE=1
 popd
 mkdir -p clr-build32
 pushd clr-build32
-export CFLAGS="-g -O2 -fuse-linker-plugin -pipe"
-export CXXFLAGS="-g -O2 -fuse-linker-plugin -fvisibility-inlines-hidden -pipe"
-export LDFLAGS="-g -O2 -fuse-linker-plugin -pipe"
+export CFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -pipe -fPIC -m32 -mstackrealign -march=native -mtune=native"
+export CXXFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -fvisibility-inlines-hidden -pipe -fPIC -m32 -mstackrealign -march=native -mtune=native"
+export LDFLAGS="-O2 -ffat-lto-objects -fuse-linker-plugin -pipe -fPIC -m32 -mstackrealign -march=native -mtune=native"
 export AR=gcc-ar
 export RANLIB=gcc-ranlib
 export NM=gcc-nm
@@ -208,7 +213,7 @@ export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32 -mstackrealign"
 export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32 -mstackrealign"
 export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
 %cmake -DLIB_INSTALL_DIR:PATH=/usr/lib32 -DCMAKE_INSTALL_LIBDIR=/usr/lib32 -DLIB_SUFFIX=32 ..   -DENABLE_APP=1 -DENABLE_STATIC_LIB=0 -DENABLE_SHARED_LIB=1 -DCMAKE_BUILD_TYPE=None -DCMAKE_C_FLAGS_RELWITHDEBINFO="-O3 -g" -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-O3 -g" -DCMAKE_C_FLAGS_RELEASE="-O3 -g" -DCMAKE_CXX_FLAGS_RELEASE="-O3 -g"
-make  %{?_smp_mflags}  V=1 VERBOSE=1 V=1 VERBOSE=1
+make  %{?_smp_mflags}  V=1 VERBOSE=1
 unset PKG_CONFIG_PATH
 popd
 
@@ -217,10 +222,11 @@ export LANG=C.UTF-8
 unset http_proxy
 unset https_proxy
 unset no_proxy
+export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 ctest -V
 
 %install
-export SOURCE_DATE_EPOCH=1598718262
+export SOURCE_DATE_EPOCH=1610596737
 rm -rf %{buildroot}
 pushd clr-build32
 %make_install32
