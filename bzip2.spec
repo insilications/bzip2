@@ -36,7 +36,6 @@ BuildRequires : gcc-libs-math
 BuildRequires : gcc-libstdc++32
 BuildRequires : gcc-libubsan
 BuildRequires : gcc-locale
-BuildRequires : glibc-abi
 BuildRequires : glibc-bench
 BuildRequires : glibc-bin
 BuildRequires : glibc-dev
@@ -131,7 +130,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1618654224
+export SOURCE_DATE_EPOCH=1620020732
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -297,24 +296,16 @@ make  %{?_smp_mflags}  V=1 VERBOSE=1
 unset PKG_CONFIG_PATH
 popd
 
-%check
-export LANG=C.UTF-8
-unset http_proxy
-unset https_proxy
-unset no_proxy
-export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
-ctest -V
-
 %install
-export SOURCE_DATE_EPOCH=1618654224
+export SOURCE_DATE_EPOCH=1620020732
 rm -rf %{buildroot}
 pushd clr-build32
 %make_install32
 if [ -d  %{buildroot}/usr/lib32/pkgconfig ]
 then
-pushd %{buildroot}/usr/lib32/pkgconfig
-for i in *.pc ; do ln -s $i 32$i ; done
-popd
+    pushd %{buildroot}/usr/lib32/pkgconfig
+    for i in *.pc ; do ln -s $i 32$i ; done
+    popd
 fi
 popd
 pushd clr-build-special
@@ -334,7 +325,8 @@ ln -sf libbz2.so.0.0.0 %{buildroot}/usr/lib32/libbz2.so.0
 #ln -sf libbz2.so.1.0.0 %{buildroot}/usr/lib32/libbz2.so.%{version}
 rm -f %{buildroot}/usr/lib32/libbz2-compat.so*
 ## install_append end
-## install_append_special contentrm -f %{buildroot}/usr/lib64/libbz2-compat.so
+## install_append_special content
+rm -f %{buildroot}/usr/lib64/libbz2-compat.so
 rm -f %{buildroot}/usr/lib64/libbz2-compat.so.0
 #rm -f %{buildroot}/usr/lib64/libbz2.so.1
 mv %{buildroot}/usr/lib64/libbz2-compat.so.0.0.0 %{buildroot}/usr/lib64/libbz2.so.0.0.0
