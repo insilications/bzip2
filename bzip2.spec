@@ -11,6 +11,8 @@ Source0  : file:///aot/build/clearlinux/packages/bzip2/bzip2-v21.01.14.tar.gz
 Summary  : Lossless, block-sorting data compression
 Group    : Development/Tools
 License  : GPL-3.0+ LGPL-2.0+
+Requires: bzip2-bin = %{version}-%{release}
+Requires: bzip2-lib = %{version}-%{release}
 BuildRequires : binutils-dev
 BuildRequires : binutils-extras
 BuildRequires : bison
@@ -62,6 +64,62 @@ Bzip2
 This Bzip2/libbz2, a program and library for lossless, block-sorting
 data compression.
 
+%package bin
+Summary: bin components for the bzip2 package.
+Group: Binaries
+
+%description bin
+bin components for the bzip2 package.
+
+
+%package dev
+Summary: dev components for the bzip2 package.
+Group: Development
+Requires: bzip2-lib = %{version}-%{release}
+Requires: bzip2-bin = %{version}-%{release}
+Provides: bzip2-devel = %{version}-%{release}
+Requires: bzip2 = %{version}-%{release}
+
+%description dev
+dev components for the bzip2 package.
+
+
+%package dev32
+Summary: dev32 components for the bzip2 package.
+Group: Default
+Requires: bzip2-lib32 = %{version}-%{release}
+Requires: bzip2-bin = %{version}-%{release}
+Requires: bzip2-dev = %{version}-%{release}
+
+%description dev32
+dev32 components for the bzip2 package.
+
+
+%package lib
+Summary: lib components for the bzip2 package.
+Group: Libraries
+
+%description lib
+lib components for the bzip2 package.
+
+
+%package lib32
+Summary: lib32 components for the bzip2 package.
+Group: Default
+
+%description lib32
+lib32 components for the bzip2 package.
+
+
+%package staticdev
+Summary: staticdev components for the bzip2 package.
+Group: Default
+Requires: bzip2-dev = %{version}-%{release}
+
+%description staticdev
+staticdev components for the bzip2 package.
+
+
 %prep
 %setup -q -n bzip2
 cd %{_builddir}/bzip2
@@ -72,7 +130,7 @@ unset https_proxy
 unset no_proxy
 export SSL_CERT_FILE=/var/cache/ca-certs/anchors/ca-certificates.crt
 export LANG=C.UTF-8
-export SOURCE_DATE_EPOCH=1622242823
+export SOURCE_DATE_EPOCH=1622243787
 mkdir -p clr-build
 pushd clr-build
 export GCC_IGNORE_WERROR=1
@@ -125,7 +183,7 @@ export CXXFLAGS="${CXXFLAGS_GENERATE}"
 export FFLAGS="${FFLAGS_GENERATE}"
 export FCFLAGS="${FCFLAGS_GENERATE}"
 export LDFLAGS="${LDFLAGS_GENERATE}"
-%cmake ..   -DENABLE_APP=1 -DENABLE_STATIC_LIB=1 -DENABLE_SHARED_LIB=0 -DCMAKE_BUILD_TYPE=None -DCMAKE_C_FLAGS_RELWITHDEBINFO="-O3 -g" -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-O3 -g" -DCMAKE_C_FLAGS_RELEASE="-O3 -g" -DCMAKE_CXX_FLAGS_RELEASE="-O3 -g"
+%cmake .. -DENABLE_APP=1 -DENABLE_STATIC_LIB=1 -DENABLE_SHARED_LIB=0 -DCMAKE_BUILD_TYPE=None
 make  %{?_smp_mflags}  V=1 VERBOSE=1  V=1 VERBOSE=1
 
 cp /usr/bin/x86_64-generic-linux-gcc .
@@ -142,7 +200,7 @@ export CXXFLAGS="${CXXFLAGS_USE}"
 export FFLAGS="${FFLAGS_USE}"
 export FCFLAGS="${FCFLAGS_USE}"
 export LDFLAGS="${LDFLAGS_USE}"
-%cmake ..   -DENABLE_APP=1 -DENABLE_STATIC_LIB=1 -DENABLE_SHARED_LIB=0 -DCMAKE_BUILD_TYPE=None -DCMAKE_C_FLAGS_RELWITHDEBINFO="-O3 -g" -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-O3 -g" -DCMAKE_C_FLAGS_RELEASE="-O3 -g" -DCMAKE_CXX_FLAGS_RELEASE="-O3 -g"
+%cmake .. -DENABLE_APP=1 -DENABLE_STATIC_LIB=1 -DENABLE_SHARED_LIB=0 -DCMAKE_BUILD_TYPE=None
 make  %{?_smp_mflags}  V=1 VERBOSE=1  V=1 VERBOSE=1
 fi
 popd
@@ -198,7 +256,7 @@ export CXXFLAGS="${CXXFLAGS_GENERATE}"
 export FFLAGS="${FFLAGS_GENERATE}"
 export FCFLAGS="${FCFLAGS_GENERATE}"
 export LDFLAGS="${LDFLAGS_GENERATE}"
-%cmake .. -DENABLE_APP=1 -DENABLE_STATIC_LIB=0 -DENABLE_SHARED_LIB=1 -DCMAKE_BUILD_TYPE=None -DCMAKE_C_FLAGS_RELWITHDEBINFO="-O3 -g" -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-O3 -g" -DCMAKE_C_FLAGS_RELEASE="-O3 -g" -DCMAKE_CXX_FLAGS_RELEASE="-O3 -g"
+%cmake .. -DENABLE_APP=1 -DENABLE_STATIC_LIB=0 -DENABLE_SHARED_LIB=1 -DCMAKE_BUILD_TYPE=None
 make  %{?_smp_mflags}  V=1 VERBOSE=1  V=1 VERBOSE=1
 
 cp /usr/bin/x86_64-generic-linux-gcc .
@@ -215,7 +273,7 @@ export CXXFLAGS="${CXXFLAGS_USE}"
 export FFLAGS="${FFLAGS_USE}"
 export FCFLAGS="${FCFLAGS_USE}"
 export LDFLAGS="${LDFLAGS_USE}"
-%cmake .. -DENABLE_APP=1 -DENABLE_STATIC_LIB=0 -DENABLE_SHARED_LIB=1 -DCMAKE_BUILD_TYPE=None -DCMAKE_C_FLAGS_RELWITHDEBINFO="-O3 -g" -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-O3 -g" -DCMAKE_C_FLAGS_RELEASE="-O3 -g" -DCMAKE_CXX_FLAGS_RELEASE="-O3 -g"
+%cmake .. -DENABLE_APP=1 -DENABLE_STATIC_LIB=0 -DENABLE_SHARED_LIB=1 -DCMAKE_BUILD_TYPE=None
 make  %{?_smp_mflags}  V=1 VERBOSE=1  V=1 VERBOSE=1
 fi
 popd
@@ -233,13 +291,13 @@ export ASFLAGS="${ASFLAGS}${ASFLAGS:+ }--32"
 export CFLAGS="${CFLAGS}${CFLAGS:+ }-m32 -mstackrealign"
 export CXXFLAGS="${CXXFLAGS}${CXXFLAGS:+ }-m32 -mstackrealign"
 export LDFLAGS="${LDFLAGS}${LDFLAGS:+ }-m32 -mstackrealign"
-%cmake -DLIB_INSTALL_DIR:PATH=/usr/lib32 -DCMAKE_INSTALL_LIBDIR=/usr/lib32 -DLIB_SUFFIX=32 ..   -DENABLE_APP=1 -DENABLE_STATIC_LIB=0 -DENABLE_SHARED_LIB=1 -DCMAKE_BUILD_TYPE=None -DCMAKE_C_FLAGS_RELWITHDEBINFO="-O3 -g" -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-O3 -g" -DCMAKE_C_FLAGS_RELEASE="-O3 -g" -DCMAKE_CXX_FLAGS_RELEASE="-O3 -g"
+%cmake -DLIB_INSTALL_DIR:PATH=/usr/lib32 -DCMAKE_INSTALL_LIBDIR=/usr/lib32 -DLIB_SUFFIX=32 .. -DENABLE_APP=1 -DENABLE_STATIC_LIB=1 -DENABLE_SHARED_LIB=0 -DCMAKE_BUILD_TYPE=None  -DENABLE_APP=1 -DENABLE_STATIC_LIB=0 -DENABLE_SHARED_LIB=1 -DCMAKE_BUILD_TYPE=None -DCMAKE_C_FLAGS_RELWITHDEBINFO="-O3 -g" -DCMAKE_CXX_FLAGS_RELWITHDEBINFO="-O3 -g" -DCMAKE_C_FLAGS_RELEASE="-O3 -g" -DCMAKE_CXX_FLAGS_RELEASE="-O3 -g"
 make  %{?_smp_mflags}  V=1 VERBOSE=1  V=1 VERBOSE=1
 unset PKG_CONFIG_PATH
 popd
 
 %install
-export SOURCE_DATE_EPOCH=1622242823
+export SOURCE_DATE_EPOCH=1622243787
 rm -rf %{buildroot}
 pushd clr-build32
 %make_install32
@@ -286,3 +344,57 @@ cp --archive %{buildroot}/usr/lib64/libbz2.so* %{buildroot}/usr/lib64/haswell/ |
 
 %files
 %defattr(-,root,root,-)
+/usr/man/man1/bzdiff.1
+/usr/man/man1/bzgrep.1
+/usr/man/man1/bzip2.1
+/usr/man/man1/bzmore.1
+
+%files bin
+%defattr(-,root,root,-)
+/usr/bin/bunzip
+/usr/bin/bunzip2
+/usr/bin/bzcat
+/usr/bin/bzcmp
+/usr/bin/bzdiff
+/usr/bin/bzegrep
+/usr/bin/bzfgrep
+/usr/bin/bzgrep
+/usr/bin/bzip2
+/usr/bin/bzip2recover
+/usr/bin/bzless
+/usr/bin/bzmore
+
+%files dev
+%defattr(-,root,root,-)
+/usr/include/bzlib.h
+/usr/lib64/haswell/libbz2.so
+/usr/lib64/libbz2.so
+/usr/lib64/pkgconfig/bzip2.pc
+
+%files dev32
+%defattr(-,root,root,-)
+/usr/lib32/libbz2.so
+/usr/lib32/pkgconfig/32bzip2.pc
+/usr/lib32/pkgconfig/bzip2.pc
+
+%files lib
+%defattr(-,root,root,-)
+/usr/lib64/haswell/libbz2.so.0
+/usr/lib64/haswell/libbz2.so.0.0.0
+/usr/lib64/haswell/libbz2.so.1.0
+/usr/lib64/haswell/libbz2.so.1.0.7
+/usr/lib64/libbz2.so.0
+/usr/lib64/libbz2.so.0.0.0
+/usr/lib64/libbz2.so.1.0
+/usr/lib64/libbz2.so.1.0.7
+
+%files lib32
+%defattr(-,root,root,-)
+/usr/lib32/libbz2.so.0
+/usr/lib32/libbz2.so.0.0.0
+/usr/lib32/libbz2.so.1.0
+/usr/lib32/libbz2.so.1.0.7
+
+%files staticdev
+%defattr(-,root,root,-)
+/usr/lib64/libbz2.a
